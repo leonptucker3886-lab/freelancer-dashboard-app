@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Freelancer Dashboard | LeonLink</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><link rel="stylesheet" href="style.css"></head><body>
+<header><div class="logo">Leon<span>Link</span> Dashboard</div><div id="who" class="hide"><span id="email"></span> <button class="ghost" onclick="sb.auth.signOut()">Log out</button></div></header>
+<div id="authView" class="auth card"><h2 id="authTitle">Log in</h2><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password (min 6 chars)">
+<button id="authBtn" onclick="doAuth()">Log in</button><br><span class="link" id="toggle" onclick="toggleMode()">No account? Sign up</span><div class="msg" id="amsg"></div></div>
+<div id="appView" class="wrap hide"><div class="kpis">
+<div class="card"><div class="n" id="k1">0</div><div class="l">Active clients</div></div><div class="card"><div class="n" id="k2">$0</div><div class="l">Pipeline value</div></div>
+<div class="card"><div class="n" id="k3">$0</div><div class="l">Paid</div></div><div class="card"><div class="n" id="k4">$0</div><div class="l">Outstanding</div></div>
+<div class="card"><div class="n" id="k5">0</div><div class="l">Overdue invoices</div></div></div>
+<div class="tabs"><button class="on" data-t="clients" onclick="tab(this)">Clients</button><button data-t="projects" onclick="tab(this)">Projects</button><button data-t="invoices" onclick="tab(this)">Invoices</button></div>
+<div class="card" id="pane"></div></div>
+<script src="app.js"></script></body></html>
