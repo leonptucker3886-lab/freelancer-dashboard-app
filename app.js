@@ -143,3 +143,14 @@ function rmChip(p,k){const a=getP(p);if(p.startsWith('statuses')&&a.length<=1)re
 function mv(k,d){const j=k+d;if(j<0||j>=S.cards.length)return;[S.cards[k],S.cards[j]]=[S.cards[j],S.cards[k]];saveS();settings()}
 async function saveForm(){['theme','accent','currency','dateFmt','prefix'].forEach(k=>S[k]=$('s_'+k).value);S.tax=+$('s_tax').value||0;['name','email','logo','address'].forEach(k=>S.biz[k]=$('b_'+k).value);await saveS();toast('Settings saved');render()}
 document.addEventListener('keydown',e=>e.key==='Escape'&&closeModal());
+
+/* Mobile: viewport, stylesheet, stacked tables */
+(function(){
+ const vp=document.querySelector('meta[name=viewport]');if(vp)vp.content='width=device-width, initial-scale=1.0, viewport-fit=cover';
+ const tc=document.createElement('meta');tc.name='theme-color';tc.content='#FAFAF9';document.head.appendChild(tc);
+ const l=document.createElement('link');l.rel='stylesheet';l.href='mobile.css?v=1';document.head.appendChild(l);
+ const label=()=>document.querySelectorAll('#view .tw table').forEach(t=>{const rows=t.rows;if(!rows.length)return;const h=[...rows[0].cells].map(c=>c.tagName==='TH'?c.textContent.trim():'');if(!h.some(Boolean))return;t.classList.add('stack');for(let i=1;i<rows.length;i++)[...rows[i].cells].forEach((c,j)=>{if(h[j]&&!c.dataset.label)c.dataset.label=h[j]})});
+ const v=document.getElementById('view');if(v)new MutationObserver(label).observe(v,{childList:true,subtree:true});
+})();
+/* Branding: Dashline */
+document.title='Dashline';document.querySelectorAll('.logo').forEach(e=>e.innerHTML='Dash<span>line</span>');
