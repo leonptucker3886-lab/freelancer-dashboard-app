@@ -1,2 +1,3 @@
-# freelancer-dashboard-app
-Freelancer Business Dashboard web app (Supabase auth + Vercel)
+# Freelancer Dashboard
+
+Minimal, customizable freelancer dashboard (clients, projects, time, invoices, reports). Static HTML/JS + Supabase. Live: https://dashapp.leonlink.net
