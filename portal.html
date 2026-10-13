@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Client portal | Dashline</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#FAFAF9;color:#18181B}.w{max-width:720px;margin:0 auto;padding:24px 16px}
+.card{background:#fff;border:1px solid #DEDDD8;border-radius:12px;padding:18px;margin-bottom:14px}h1{font-size:22px;margin:0 0 4px}.m{color:#71717A;font-size:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #EEE}.row:first-of-type{border-top:0}
+.pill{font-size:12px;padding:3px 10px;border-radius:99px;background:#F4F4F2}.paid{background:#E6F4E6;color:#008300}.od{background:#FDECEC;color:#DC2626}
+a.b{background:#2A78D6;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:700;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center}
+.ok{background:#E6F4E6;color:#065f06;padding:12px 16px;border-radius:10px;margin-bottom:14px}img{max-height:44px}</style></head><body><div class="w" id="v"><p class="m">Loading…</p></div>
+<script>
+const sb=supabase.createClient('https://cjtutkvhyzjsgclqvylg.supabase.co','sb_publishable_E48ovT9wWxduLxnzPXL_5g_SnNl2rqz');
+const q=new URLSearchParams(location.search),t=q.get('t'),esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+(async()=>{const v=document.getElementById('v');const thanks=q.get('paid')?'<div class="ok">Payment received. Thank you!</div>':'';
+ if(!t){v.innerHTML=thanks||'<p>Invalid link.</p>';return}
+ const{data:d,error}=await sb.rpc('fd_portal',{t});
+ if(error||!d){v.innerHTML=thanks+'<p>This link is invalid or has expired.</p>';return}
+ if(d.disabled){v.innerHTML=thanks+'<div class="card"><p>This client portal is not available.</p></div>';return}
+ const m=n=>{try{return new Intl.NumberFormat(undefined,{style:'currency',currency:d.currency}).format(+n||0)}catch{return(+n||0).toFixed(2)}};const td=new Date().toISOString().slice(0,10);
+ const inv=d.invoices.map(i=>{const od=i.status!=='Paid'&&i.due_date&&i.due_date<td;return`<div class="row"><div><b>${esc(i.number)}</b> · ${m(i.total)}<div class="m">${i.due_date?'Due '+esc(i.due_date):''} <span class="pill ${i.status==='Paid'?'paid':od?'od':''}">${i.status==='Paid'?'Paid':od?'Overdue':'Unpaid'}</span></div></div>${i.status!=='Paid'&&i.total>0?`<a class="b" href="/api/pay?t=${t}&i=${i.id}">Pay</a>`:''}</div>`}).join('')||'<p class="m">No invoices yet.</p>';
+ const ct=d.contracts.map(k=>`<div class="row"><div><b>${esc(k.title)}</b><div class="m"><span class="pill ${k.status==='Signed'?'paid':''}">${esc(k.status)}</span></div></div><a class="b" href="/sign.html?t=${k.token}">${k.status==='Signed'?'View':'Review & sign'}</a></div>`).join('')||'<p class="m">No documents.</p>';
+ v.innerHTML=`${thanks}<div class="card">${d.biz.logo?`<img src="${esc(d.biz.logo)}"><br>`:''}<h1>${esc(d.biz.name||'Client portal')}</h1><div class="m">Portal for ${esc(d.client)}</div></div><div class="card"><h3>Invoices</h3>${inv}</div><div class="card"><h3>Contracts</h3>${ct}</div><p class="m" style="text-align:center">Powered by Dashline</p>`})();
+</script></body></html>
